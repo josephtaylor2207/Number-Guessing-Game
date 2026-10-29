@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Guessing Game</title>
+    <style>
+      .Randombox {
+        background-color: black;
+        color: white;
+        width: 200px;
+        height: 200px;
+        font-size: 55px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="Randombox">?</div>
+
+    <form action="">
+      <label>Enter your number</label>
+      <br />
+      <input class="inputbox" type="number" min="1" max="20" />
+      <br />
+      <button class="btn" type="submit">Submit</button>
+    </form>
+
+    <p class="para">Please enter your guessed number above.</p>
+    <p>Score: <span class="highscore">5</span></p>
+
+    <button class="reset" type="button">Reset</button>
+    <script>
+      let randomnumber = Math.floor(Math.random() * 20) + 1;
+      console.log(randomnumber);
+
+      const btn = document.querySelector(".btn");
+      const reset = document.querySelector(".reset");
+      const inputbox = document.querySelector(".inputbox");
+      const para = document.querySelector(".para");
+      const highscore = document.querySelector(".highscore");
+      const Randombox = document.querySelector(".Randombox");
+
+      let score = 5;
+      let canLoseScore = true;
+
+      btn.addEventListener("click", function (event) {
+        event.preventDefault();
+
+        const usernumber = Number(inputbox.value);
+
+        if (inputbox.value === "") {
+          para.textContent = "Please enter a number.";
+          return;
+        }
+
+        if (usernumber < 1 || usernumber > 20) {
+          para.textContent = "You can only guess a number between 1 and 20.";
+          return;
+        }
+
+        if (canLoseScore === false) {
+          para.textContent = "Game over! Press Reset to play again.";
+          return;
+        }
+
+        if (usernumber === randomnumber) {
+          para.textContent = "You win!";
+          document.body.style.backgroundColor = "green";
+          Randombox.textContent = randomnumber;
+          canLoseScore = false;
+        } else {
+          if (usernumber > randomnumber) {
+            para.textContent =
+              "You guessed a bigger number than the random number.";
+          } else {
+            para.textContent =
+              "You guessed a smaller number than the random number.";
+          }
+
+          document.body.style.backgroundColor = "orange";
+
+          if (canLoseScore === true) {
+            score--;
+
+            if (score <= 0) {
+              score = 0;
+              canLoseScore = false;
+              document.body.style.backgroundColor = "red";
+              para.textContent = "Game over! Press Reset to play again.";
+              Randombox.textContent = randomnumber;
+            }
+
+            highscore.textContent = score;
+          }
+        }
+      });
+
+      reset.addEventListener("click", function () {
+        randomnumber = Math.floor(Math.random() * 20) + 1;
+        console.log(randomnumber);
+
+        score = 20;
+        canLoseScore = true;
+
+        highscore.textContent = score;
+        para.textContent = "Please enter your guessed number above.";
+        Randombox.textContent = "?";
+        inputbox.value = "";
+        document.body.style.backgroundColor = "white";
+      });
+    </script>
+  </body>
+</html>
